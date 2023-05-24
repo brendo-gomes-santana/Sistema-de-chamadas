@@ -1,14 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Link } from 'react-router-dom'
 
+import { AuthContext } from '../../contexts/auth'
 import './style.css'
 
 
 export default function Login() {
   
+  const { login } = useContext(AuthContext)
+  
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   
+  async function handleLogin(){
+    if(!email || !password){
+      alert('preenchar todos os campos')
+      return;
+    }
+
+    login(email, password)
+  }
   return (
     <div className='container-center'>
         
@@ -16,7 +27,7 @@ export default function Login() {
           <div className='login-area'>
               <img src={require('../../assets/logo.png')} alt='logo'/>
           </div>
-          <form>
+          <form onSubmit={handleLogin}>
             <h1>Entrar</h1>
             
             <input type='text' placeholder='Digite seu email'
