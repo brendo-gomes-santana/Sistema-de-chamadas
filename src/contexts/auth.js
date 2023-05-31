@@ -1,7 +1,7 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { doc, setDoc } from 'firebase/firestore'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { doc, setDoc, getDoc } from 'firebase/firestore'
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -15,10 +15,47 @@ export default function AuthProvider({children}){
 
     const [user, setUser] = useState(null)
     const [loadingAuth, setLoadingAuth] = useState(false)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(()=> {
+        (async()=> {
+            const storageUser = JSON.parse(localStorage.getItem('@user'))
+
+            if(storageUser){
+                setUser(storageUser)
+                setLoading(false)
+            }
+            setLoading(false)
+        })()
+    },[])
 
     async function login(email, password){
-        alert(email)
-        alert(password)
+
+        setLoadingAuth(true)
+        
+        await signInWithEmailAndPassword(auth, email, password)
+        .then(async (value)=> {
+
+            const docRef = doc(db, 'user', value.user.uid)
+            const docSnap = await getDoc(docRef)
+            let data = {
+                id: value.user.id,
+                nome: docSnap.data().nome,
+                email: value.user.email,
+                avatarUrl: docSnap.data().avatarUrl
+            }
+
+            setUser(data)
+            storageUser(data)
+            setLoadingAuth(false)
+            toast.success('Bem vindo de volta!')
+            navigate('/dashboard')
+        })
+        .catch((erro)=> {
+            console.log(erro)
+            setLoadingAuth(false)
+            toast.error('Ocorreu algo errado')
+        })
     }
 
     async function cadastrar(nome, email, password){
@@ -62,6 +99,12 @@ export default function AuthProvider({children}){
         localStorage.setItem('@user', JSON.stringify(data))
     }
 
+    async function logout(){
+        await signOut(auth)
+        localStorage.removeItem('@user')
+        setUser(null)
+    }
+
     return(
         <AuthContext.Provider 
         value={{
@@ -69,7 +112,9 @@ export default function AuthProvider({children}){
             user,           // quando não tem informação dentro do user ele fica como false e se tem true.
             login,
             cadastrar, 
-            loadingAuth           
+            loadingAuth ,
+            loading,
+            logout          
         }}>
             {children}
         </AuthContext.Provider>

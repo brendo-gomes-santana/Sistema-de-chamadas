@@ -7,18 +7,19 @@ import './style.css'
 
 export default function Login() {
   
-  const { login } = useContext(AuthContext)
+  const { login, loadingAuth } = useContext(AuthContext)
   
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   
-  async function handleLogin(){
+  async function handleLogin(e){
+    e.preventDefault()
     if(!email || !password){
       alert('preenchar todos os campos')
       return;
     }
 
-    login(email, password)
+    await login(email, password)
   }
   return (
     <div className='container-center'>
@@ -36,7 +37,7 @@ export default function Login() {
             <input type='password' placeholder='Digite sua senha' 
             value={password} onChange={ v => setPassword(v.target.value)}/>
 
-            <button type='submit'> Entrar </button>
+            <button type='submit' disabled={loadingAuth}> {loadingAuth ? 'Carregando' : 'Acessar'}</button>
           </form>
           <Link to='/cadastro'>Você não possui senha? Registar agora</Link>
         </div>
