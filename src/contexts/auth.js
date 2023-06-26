@@ -114,7 +114,10 @@ export default function AuthProvider({children}){
             cadastrar, 
             loadingAuth ,
             loading,
-            logout          
+            logout,
+            
+            storageUser,
+            setUser
         }}>
             {children}
         </AuthContext.Provider>
