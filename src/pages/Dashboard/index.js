@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { FiPlus, FiMessageSquare, FiSearch, FiEdit2 } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 import Title from '../../components/Title'

@@ -8,6 +8,7 @@ import Cadastro from '../pages/Cadastrar';
 import Dashboard from '../pages/Dashboard';
 import Profile from '../pages/Profile';
 import NewClient from '../pages/NewClient';
+import New from '../pages/New';
 export default function Routers() {
   return (
     <Routes>
@@ -17,6 +18,8 @@ export default function Routers() {
         <Route path='/dashboard' element={ <Private> <Dashboard/> </Private> }/>
         <Route path='/profile' element={ <Private> <Profile/> </Private> } />
         <Route path='/customers' element={ <Private> <NewClient/> </Private> }/>
+        <Route path='/new' element={ <Private> <New/> </Private> }/>
+        
     </Routes>
   )
 }
