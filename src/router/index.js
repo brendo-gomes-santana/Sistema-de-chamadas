@@ -19,6 +19,7 @@ export default function Routers() {
         <Route path='/profile' element={ <Private> <Profile/> </Private> } />
         <Route path='/customers' element={ <Private> <NewClient/> </Private> }/>
         <Route path='/new' element={ <Private> <New/> </Private> }/>
+        <Route path='/new/:id' element={ <Private> <New/> </Private> }/>
         
     </Routes>
   )
