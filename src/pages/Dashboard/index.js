@@ -26,6 +26,9 @@ export default function Dashboard() {
   const [lastDocs, setLastDocs] = useState();
   const [loadingMore, setLoadingMore] = useState(false);
 
+  const [showPostModal, setShoePostModal] = useState(false);
+  const [detail, setDetail] = useState();
+
   useEffect(() => {
     (async () => {
       const q = query(listRef, orderBy("created", "desc"), limit(5));
@@ -66,14 +69,23 @@ export default function Dashboard() {
   }
 
   async function handleMore() {
-      setLoadingMore(true)
+    setLoadingMore(true);
 
-      const q = query(listRef, orderBy("created", 'desc'), startAfter(lastDocs), limit(5))
-      const querySnapshot = await getDocs(q)
-      await updateState(querySnapshot)
+    const q = query(
+      listRef,
+      orderBy("created", "desc"),
+      startAfter(lastDocs),
+      limit(5)
+    );
+    const querySnapshot = await getDocs(q);
+    await updateState(querySnapshot);
+  }
 
-      
-    }
+  function toglleModal(item){
+    console.log(item)
+    setDetail(item)
+    setShoePostModal(!showPostModal)
+  }
 
   if (loading) {
     return (
@@ -131,7 +143,8 @@ export default function Dashboard() {
                         <span
                           className="badge"
                           style={{
-                            backgroundColor: item.status === 'Aberto' ? '#5cb85c' : "#999",
+                            backgroundColor:
+                              item.status === "Aberto" ? "#5cb85c" : "#999",
                           }}
                         >
                           {item.status}
@@ -140,6 +153,7 @@ export default function Dashboard() {
                       <td data-label="Cadastrado">{item.createdFormat}</td>
                       <td data-label="#">
                         <button
+                        onClick={ () => toglleModal(item)}
                           className="action"
                           style={{
                             backgroundColor: "#3583f6",
@@ -163,12 +177,19 @@ export default function Dashboard() {
               })}
             </table>
             {loadingMore && <h3>Buscando mais chamados...</h3>}
-            {!loadingMore && !isEmpty && <button onClick={handleMore} className='btn-more'>Buscar mais</button>} 
-            
+            {!loadingMore && !isEmpty && (
+              <button onClick={handleMore} className="btn-more">
+                Buscar mais
+              </button>
+            )}
           </>
         )}
       </div>
-      <Modal/>
+
+      {showPostModal && <Modal 
+        conteudo={detail}
+        close={ () => setShoePostModal(!showPostModal)}
+      />}
     </>
   );
 }

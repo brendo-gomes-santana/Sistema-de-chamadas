@@ -80,7 +80,7 @@ export default function New() {
           setLoadCustomers(false);
 
           if (id) {
-            loadId(lista);
+            loadId();
           }
         })
         .catch((err) => {

@@ -3,38 +3,39 @@ import { FiX } from 'react-icons/fi';
 
 
 import './modal.css'
-export default function Modal() {
+export default function Modal({conteudo, close}) {
   return (
     <div className='modal'>
         <div className='container'>
-            <button className='close'><FiX size={25} color='#fff'/></button>
+            <button className='close'><FiX size={25} color='#fff'
+            onClick={ close }/></button>
 
             <main>
                 <h2>Detalhes do chamado</h2>
 
                 <div  className='row' >
                     <span>
-                        Cliente: <i>Mercado</i>
+                        Cliente: <i>{conteudo.cliente}</i>
                     </span>
                 </div>
                 
                 <div  className='row' >
                     <span>
-                        Assunto: <i>Mercado</i>
+                        Assunto: <i>{conteudo.assunto}</i>
                     </span>
                     <span>
-                        Cadastrado em: <i>22/08/2022</i>
+                        Cadastrado em: <i>{conteudo.createdFormat}</i>
                     </span>
                 </div>
 
                 <div  className='row' >
                     <span>
-                        Status: <i>Aberto</i>
+                        Status: <i>{conteudo.status}</i>
                     </span>
                 </div>
                 <>
                 <h3>Complemento</h3>
-                <p>Aqui vai todo o completo do chamado</p>
+                <p>{conteudo.complemento === '' ? 'Não possui complemento' : conteudo.complemento}</p>
                 </>
             </main>
         </div>
